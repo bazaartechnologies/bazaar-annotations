@@ -5,3 +5,26 @@ plugins {
     id 'org.jetbrains.kotlin.android' version '1.8.0' apply false
     id 'com.google.dagger.hilt.android' version '2.44' apply false
 }
+
+allprojects {
+    Properties githubProperties = new Properties()
+    def propertiesFile = project.rootProject.file('github.properties')
+    if (propertiesFile.exists()) {
+        githubProperties.load(propertiesFile.newDataInputStream())
+    }
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+        maven { url 'https://maven.apptimize.com/artifactory/repo' }
+        maven { url 'https://jitpack.io' }
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/bazaartechnologies/bazaar-android-libraries")
+            credentials {
+                username = githubProperties['gpr.usr'] ?: System.getenv("GPR_USER")
+                password = githubProperties['gpr.key'] ?: System.getenv("GPR_API_KEY")
+            }
+        }
+    }
+}
