@@ -13,7 +13,7 @@ publishing {
             groupId 'com.bazaar.annotation' // Replace with group ID
             artifactId getArtificatId()
             version "1.0.0"
-            artifact("$buildDir/outputs/aar/${getArtificatId()}-release.aar")
+            artifact("$buildDir/libs/${getArtificatId()}.jar")
             //generate .pom file with transitive dependencies
             pom.withXml {
                 final dependenciesNode = asNode().appendNode('dependencies')
