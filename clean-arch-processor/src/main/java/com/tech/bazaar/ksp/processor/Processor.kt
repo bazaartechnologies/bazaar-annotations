@@ -13,6 +13,7 @@ import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.tech.bazaar.ksp.extensions.getAnnotatedClassVariables
+import com.tech.bazaar.ksp.extensions.sliceOrNull
 
 internal class Processor(
     private val environment: SymbolProcessorEnvironment,
@@ -173,6 +174,6 @@ internal class Processor(
     }
 
     private fun getRootPackage(filePath: String?) = filePath?.split(".")
-        ?.slice(IntRange(0, 3))?.joinToString(separator = ".")
+        ?.sliceOrNull(IntRange(0, 3))?.joinToString(separator = ".")
 
 }

@@ -12,7 +12,7 @@ publishing {
         bar(MavenPublication) {
             groupId 'com.bazaar.annotation' // Replace with group ID
             artifactId getArtificatId()
-            version "1.0.2"
+            version "1.0.3"
             artifact("$buildDir/libs/${getArtificatId()}.jar")
             //generate .pom file with transitive dependencies
             pom.withXml {

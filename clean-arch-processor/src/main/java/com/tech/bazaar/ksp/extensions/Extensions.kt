@@ -59,3 +59,11 @@ fun Resolver.getAnnotatedClasses(
 
     return annotatedClasses
 }
+
+public fun <T> List<T>.sliceOrNull(indices: IntRange): List<T> {
+    return try{
+        this.slice(indices)
+    }catch (exp : Exception){
+        emptyList()
+    }
+}
