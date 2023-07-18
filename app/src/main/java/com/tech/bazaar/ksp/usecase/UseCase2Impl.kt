@@ -1,3 +1,7 @@
 package com.tech.bazaar.ksp.usecase
 
-class UseCase2Impl : IUseCase2
+import com.bazaar.handshake.sdk.HandshakeGenerator
+
+class UseCase2Impl(
+    private val handshakeGenerator: HandshakeGenerator,
+) : IUseCase2

@@ -12,6 +12,7 @@ import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
 import com.google.devtools.ksp.symbol.ClassKind
 import com.google.devtools.ksp.symbol.KSAnnotated
 import com.google.devtools.ksp.symbol.KSClassDeclaration
+import com.tech.bazaar.ksp.extensions.getAnnotatedClassVariables
 
 internal class Processor(
     private val environment: SymbolProcessorEnvironment,
@@ -39,9 +40,13 @@ internal class Processor(
         val annotatedClasses = resolver.getAnnotatedClasses(
             annotation
         )
+        val rootPackage = getRootPackage(annotatedClasses.firstOrNull()?.packageName?.asString())
 
+        // check if it was a class or interface
         if (annotatedClasses.any { it.classKind != ClassKind.INTERFACE }) {
-            validate(annotatedClasses, inclusions)
+            // for Class(Fragment/Activity/VM)
+
+            validate(annotatedClasses, inclusions, rootPackage)
 
             generateFile(buildString {
                 newLine()
@@ -51,7 +56,7 @@ internal class Processor(
                 newLine()
             })
         } else {
-
+            // for Interface
             //step 2 - For each interface, find Implementation classes
             val files = resolver.getAllFiles().toList()
 
@@ -73,7 +78,7 @@ internal class Processor(
                 }.toSet()).isNotEmpty()
             }
 
-            validate(implementationClasses, inclusions)
+            validate(implementationClasses, inclusions, rootPackage)
 
             generateFile(buildString {
                 newLine()
@@ -109,15 +114,22 @@ internal class Processor(
     }
 
     private fun validate(
-        implementationClasses: List<KSClassDeclaration>, inclusions: List<String>
+        implementationClasses: List<KSClassDeclaration>,
+        inclusions: List<String>,
+        appRootPackage: String?
     ) {
         // step 3 - For each Implementation class, access it’s constructor parameters
         implementationClasses.forEach { implClass ->
+            // get & validate each constructor parameter
             implClass.getConstructorParameters().forEach {
 
-                // step 4 - For each parameter/class, get it’s annotation
+                // step 4 - For each class, get it’s annotation
                 val parameterClass = it.getClassFromParameter()
 
+                val classRootPackage = getRootPackage(parameterClass?.packageName?.asString())
+                if (classRootPackage != appRootPackage) {
+                    return@forEach
+                }
                 // step 5 - Validate according to respective layer
                 val annotationsList =
                     parameterClass?.annotations?.toMutableList() ?: mutableListOf()
@@ -132,7 +144,35 @@ internal class Processor(
                     )
                 }
             }
+
+            // get & validate each class variable which is @Inject annotated
+            implClass.getAnnotatedClassVariables().filter {
+                it.annotations.toList().isNotEmpty()
+                        && (!it.annotations.toList()
+                    .map { it.shortName.toString() }.toList().contains("Inject"))
+            }.map {
+                it.type.resolve().declaration as KSClassDeclaration
+            }.forEach {
+
+                val classRootPackage = getRootPackage(it.packageName.asString())
+                if (classRootPackage != appRootPackage) {
+                    return@forEach
+                }
+                // step 4 - For each class, get it’s annotation
+                // step 5 - Validate according to respective layer
+                val annotations =
+                    it.annotations.toList().map { it.shortName.asString() }
+
+                if (annotations.isEmpty() || annotations.intersect(inclusions).isEmpty()) {
+                    throw java.lang.Exception(
+                        "$implClass variables are annotated with $annotations but should have annotated with $inclusions"
+                    )
+                }
+            }
         }
     }
+
+    private fun getRootPackage(filePath: String?) = filePath?.split(".")
+        ?.slice(IntRange(0, 3))?.joinToString(separator = ".")
 
 }
