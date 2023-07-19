@@ -17,11 +17,6 @@ internal class Processor(
     private val environment: SymbolProcessorEnvironment,
 ) : SymbolProcessor {
 
-    companion object {
-        const val GENERATED_PACKAGE = "generated.file"
-        const val GENERATED_FILE_NAME = "GeneratedFile"
-    }
-
     override fun process(resolver: Resolver): List<KSAnnotated> {
         AnnotationProperties.values().forEach { annotation ->
             findAndValidateAnnotations(
@@ -34,7 +29,6 @@ internal class Processor(
     private fun findAndValidateAnnotations(
         resolver: Resolver, annotation: String, inclusions: List<String>
     ) {
-
         //step1 - Find interfaces annotated with @CustomAnnotation
         val annotatedClasses = resolver.getAnnotatedClasses(
             annotation
