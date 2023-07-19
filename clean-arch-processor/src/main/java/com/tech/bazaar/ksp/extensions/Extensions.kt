@@ -1,32 +1,9 @@
 package com.tech.bazaar.ksp.extensions
 
-import com.tech.bazaar.ksp.processor.Processor
-import com.google.devtools.ksp.processing.Dependencies
 import com.google.devtools.ksp.processing.Resolver
-import com.google.devtools.ksp.processing.SymbolProcessorEnvironment
 import com.google.devtools.ksp.symbol.KSClassDeclaration
 import com.google.devtools.ksp.symbol.KSPropertyDeclaration
 import com.google.devtools.ksp.symbol.KSValueParameter
-
-fun StringBuilder.newLine(count: Int = 1) {
-    repeat(count) {
-        append("\n")
-    }
-}
-
-fun SymbolProcessorEnvironment.createFileWithText(
-    text: String
-) {
-    val file = this.codeGenerator.createNewFile(
-        Dependencies(
-            false
-        ),
-        Processor.GENERATED_PACKAGE,
-        Processor.GENERATED_FILE_NAME
-    )
-
-    file.write(text.toByteArray())
-}
 
 fun KSClassDeclaration.getConstructorParameters(): List<KSValueParameter> {
     val constructor = primaryConstructor ?: return emptyList()
@@ -60,10 +37,10 @@ fun Resolver.getAnnotatedClasses(
     return annotatedClasses
 }
 
-public fun <T> List<T>.sliceOrNull(indices: IntRange): List<T> {
-    return try{
+fun <T> List<T>.sliceOrNull(indices: IntRange): List<T> {
+    return try {
         this.slice(indices)
-    }catch (exp : Exception){
+    } catch (exp: Exception) {
         emptyList()
     }
 }

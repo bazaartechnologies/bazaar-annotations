@@ -1,10 +1,8 @@
 package com.tech.bazaar.ksp.processor
 
-import com.tech.bazaar.ksp.extensions.createFileWithText
 import com.tech.bazaar.ksp.extensions.getAnnotatedClasses
 import com.tech.bazaar.ksp.extensions.getClassFromParameter
 import com.tech.bazaar.ksp.extensions.getConstructorParameters
-import com.tech.bazaar.ksp.extensions.newLine
 import com.tech.bazaar.ksp.properties.AnnotationProperties
 import com.google.devtools.ksp.processing.Resolver
 import com.google.devtools.ksp.processing.SymbolProcessor
@@ -46,16 +44,7 @@ internal class Processor(
         // check if it was a class or interface
         if (annotatedClasses.any { it.classKind != ClassKind.INTERFACE }) {
             // for Class(Fragment/Activity/VM)
-
             validate(annotatedClasses, inclusions, rootPackage)
-
-            generateFile(buildString {
-                newLine()
-                append(
-                    "all classes $annotatedClasses"
-                )
-                newLine()
-            })
         } else {
             // for Interface
             //step 2 - For each interface, find Implementation classes
@@ -80,37 +69,6 @@ internal class Processor(
             }
 
             validate(implementationClasses, inclusions, rootPackage)
-
-            generateFile(buildString {
-                newLine()
-                append(
-                    "all interfaces $annotatedClasses"
-                )
-                newLine()
-                append(
-                    "all implementations $implementationClasses"
-                )
-                newLine()
-            })
-        }
-    }
-
-    private fun generateFile(
-        body: String
-    ) {
-        val fileText = buildString {
-            append("package $GENERATED_PACKAGE")
-            newLine(2)
-            append("fun printHackFunction() = \"\"\"")
-            append(body)
-            append("\"\"\"")
-            newLine()
-        }
-
-        try {
-            environment.createFileWithText(fileText)
-        } catch (e: Exception) {
-            environment.logger.warn("Exception")
         }
     }
 
