@@ -1,6 +1,6 @@
 package com.tech.bazaar.ksp.rds
 
-import com.tech.bazaar.annotation.RDSAnnotation
+import com.tech.bazaar.annotation.RDS
 
-@RDSAnnotation
+@RDS
 interface IRDS

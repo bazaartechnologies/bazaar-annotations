@@ -1,6 +1,6 @@
 package com.tech.bazaar.ksp.repository
 
-import com.tech.bazaar.annotation.RepositoryAnnotation
+import com.tech.bazaar.annotation.Repository
 
-@RepositoryAnnotation
+@Repository
 interface IRepository

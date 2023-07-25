@@ -1,6 +1,6 @@
 package com.tech.bazaar.ksp.usecase
 
-import com.tech.bazaar.annotation.UseCaseAnnotation
+import com.tech.bazaar.annotation.UseCase
 
-@UseCaseAnnotation
+@UseCase
 interface IUseCase

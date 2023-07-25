@@ -1,6 +1,6 @@
 package com.tech.bazaar.ksp.lds
 
-import com.tech.bazaar.annotation.LDSAnnotation
+import com.tech.bazaar.annotation.LDS
 
-@LDSAnnotation
+@LDS
 interface ILDS

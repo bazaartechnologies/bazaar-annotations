@@ -1,7 +1,7 @@
 package com.tech.bazaar.ksp.rds
 
-import com.tech.bazaar.annotation.ApiServiceAnnotation
+import com.tech.bazaar.annotation.ApiService
 
 
-@ApiServiceAnnotation
+@ApiService
 interface ApiService

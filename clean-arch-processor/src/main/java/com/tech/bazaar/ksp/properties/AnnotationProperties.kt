@@ -1,10 +1,10 @@
 package com.tech.bazaar.ksp.properties
 
-import com.tech.bazaar.annotation.ApiServiceAnnotation
-import com.tech.bazaar.annotation.LDSAnnotation
-import com.tech.bazaar.annotation.RDSAnnotation
-import com.tech.bazaar.annotation.RepositoryAnnotation
-import com.tech.bazaar.annotation.UseCaseAnnotation
+import com.tech.bazaar.annotation.ApiService as ApiServiceAnnotation
+import com.tech.bazaar.annotation.LDS as LDSAnnotation
+import com.tech.bazaar.annotation.RDS as RDSAnnotation
+import com.tech.bazaar.annotation.Repository as RepositoryAnnotation
+import com.tech.bazaar.annotation.UseCase as UseCaseAnnotation
 
 enum class AnnotationProperties(val annotationName: String, val inclusions: List<String>) {
     LDS(
