@@ -14,8 +14,8 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.0"
     implementation "org.jetbrains.kotlin:kotlin-scripting-compiler-embeddable:1.8.0"
 
-        implementation project(':clean-arch-annotation')
-//    implementation 'com.bazaar.annotation:clean-arch-annotation:1.0.1'
+//        implementation project(':clean-arch-annotation')
+    implementation 'com.bazaar.annotation:clean-arch-annotation:1.0.2'
 
 }
 
